@@ -2,9 +2,10 @@ function getMonth() {
   $.ajax({
     url: "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
     method: "GET",
-    success: function (data) {
-      console.log('success', data);
-
+    success: function (data) {    
+      var objMonth = data.response;
+      console.log('success', objMonth);
+      convertMonth(objMonth);
     },
     error: function (error) {
       console.log("error", error);
@@ -12,7 +13,26 @@ function getMonth() {
   });
 }
 
+function evaluateMonthData() {
+  
 
+}
+
+function convertMonth(objMonth) {
+  //estrapolare quanti giorni ha un mese
+  var yearAndMonth = objMonth[0].date.slice(0,7);
+  var daysInAMonth = moment(yearAndMonth, "YYYY-MM").daysInMonth();
+  console.log(yearAndMonth);
+  console.log('daysInAMonth', daysInAMonth);
+  // objMonth.array.forEach(el => {
+    
+  // });
+  
+  // var daysInAMonth = moment("2012-02-01", "YYYY-MM").daysInMonth();
+  //creare una lista di n° giorni elementi
+
+  //inserire le festività nella lista
+}
 
 
 
