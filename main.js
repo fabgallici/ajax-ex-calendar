@@ -13,10 +13,7 @@ function getMonth() {
   });
 }
 
-function evaluateMonthData() {
-  
 
-}
 
 function convertMonth(objMonth) {
   //estrapolare quanti giorni ha un mese
@@ -24,33 +21,33 @@ function convertMonth(objMonth) {
   var yearAndMonth = objMonth[0].date;
   var daysInAMonth = moment(yearAndMonth, "YYYY-MM-DD").daysInMonth();
   var monthName = moment(yearAndMonth, "YYYY-MM-DD").format('MMMM');
-  var yearName = moment(yearAndMonth, "YYYY-MM-DD").format('YYYY');
+  var yearNum = moment(yearAndMonth, "YYYY-MM-DD").format('YYYY');
   console.log(yearAndMonth);
   console.log('daysInAMonth', daysInAMonth);
   console.log('monthname', monthName);
-  console.log('year', yearName);
+  console.log('year', yearNum);
   for (i = 1; i <= daysInAMonth; i++) {
     //creare una data del giorno es 2018-01-01 da usare come attributo
-    var currentDate = moment(yearName + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
+    var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
     console.log('currendata', currentDate);
     printCalendar(i, monthName, currentDate);
     // console.log(i, monthName);
   }
-  // objMonth.array.forEach(el => {
-    
-  // });
-  
-  // var daysInAMonth = moment("2012-02-01", "YYYY-MM").daysInMonth();
-  //creare una lista di n° giorni elementi
 
   //inserire le festività nella lista
 }
 
-function printCalendar(day, month, currentDate) {
+function evaluateMonthData() {
+
+
+}
+
+
+function printCalendar(day, monthName, currentDate) {
   var source = document.getElementById('calendar-template').innerHTML;
   var calendarTemplate = Handlebars.compile(source);
-  // var calendarData = { dayNumber: day, monthName: month};
-  var calendarData = { dayNumber: day, monthName: month, festDate: currentDate };
+  // var calendarData = { dayNumber: day, monthName: monthName};
+  var calendarData = { dayNumber: day, monthName: monthName, currentDate: currentDate };
   var htmlcalendarData = calendarTemplate(calendarData);
   $('.container.days-container').append(htmlcalendarData);
 }
@@ -59,3 +56,7 @@ function printCalendar(day, month, currentDate) {
 $(document).ready(function () {
   getMonth();
 });
+
+  // objMonth.array.forEach(el => {
+
+  // });
