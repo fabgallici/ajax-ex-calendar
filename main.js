@@ -24,9 +24,15 @@ function convertMonth(objMonth) {
   var yearAndMonth = objMonth[0].date;
   var daysInAMonth = moment(yearAndMonth, "YYYY-MM-DD").daysInMonth();
   var monthName = moment(yearAndMonth, "YYYY-MM-DD").format('MMMM');
+  var yearName = moment(yearAndMonth, "YYYY-MM-DD").format('YYYY');
   console.log(yearAndMonth);
   console.log('daysInAMonth', daysInAMonth);
   console.log('monthname', monthName);
+  console.log('year', yearName);
+  for (i = 1; i <= daysInAMonth; i++) {
+    
+    console.log(i, monthName);
+  }
   // objMonth.array.forEach(el => {
     
   // });
