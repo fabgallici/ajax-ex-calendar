@@ -33,6 +33,10 @@ body {
     flex-basis: 200px;
     padding: 20px;
     margin: 10px 20px;
-    height: 360px;
+    height: 200px;
     text-align: center;
+}
+
+.bg-fest {
+  background-color: lightblue;
 }

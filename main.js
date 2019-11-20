@@ -35,13 +35,24 @@ function convertMonth(objMonth) {
   }
 
   //inserire le festività nella lista
+  checkFestivity(objMonth);
 }
 
 function evaluateMonthData() {
-
+  //da pensare come dividere func
 
 }
 
+function checkFestivity(objMonth) {
+  objMonth.forEach(el => {
+    var festName = el.name;
+    var date = el.date;
+    console.log ('festname', festName, date);
+    //aggiungo festività in pagina e cambio background cella
+    $(`.date[data-name="${date}"]`).html(festName).closest('.days').addClass('bg-fest');
+    
+  });
+}
 
 function printCalendar(day, monthName, currentDate) {
   var source = document.getElementById('calendar-template').innerHTML;
