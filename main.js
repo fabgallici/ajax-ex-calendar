@@ -30,7 +30,7 @@ function convertMonth(objMonth) {
   console.log('monthname', monthName);
   console.log('year', yearName);
   for (i = 1; i <= daysInAMonth; i++) {
-    
+    printCalendar(i, monthName);
     console.log(i, monthName);
   }
   // objMonth.array.forEach(el => {
@@ -43,7 +43,14 @@ function convertMonth(objMonth) {
   //inserire le festività nella lista
 }
 
-
+function printCalendar(day, month) {
+  var source = document.getElementById('calendar-template').innerHTML;
+  var calendarTemplate = Handlebars.compile(source);
+  var calendarData = { dayNumber: day, monthName: month};
+  // var calendarData = { dayNumber: day, monthName: month, festName: fest };
+  var htmlcalendarData = calendarTemplate(calendarData);
+  $('.container.days-container').append(htmlcalendarData);
+}
 
 
 $(document).ready(function () {
