@@ -20,10 +20,13 @@ function evaluateMonthData() {
 
 function convertMonth(objMonth) {
   //estrapolare quanti giorni ha un mese
-  var yearAndMonth = objMonth[0].date.slice(0,7);
-  var daysInAMonth = moment(yearAndMonth, "YYYY-MM").daysInMonth();
+  // var yearAndMonth = objMonth[0].date.slice(0,7);
+  var yearAndMonth = objMonth[0].date;
+  var daysInAMonth = moment(yearAndMonth, "YYYY-MM-DD").daysInMonth();
+  var monthName = moment(yearAndMonth, "YYYY-MM-DD").format('MMMM');
   console.log(yearAndMonth);
   console.log('daysInAMonth', daysInAMonth);
+  console.log('monthname', monthName);
   // objMonth.array.forEach(el => {
     
   // });
@@ -33,6 +36,7 @@ function convertMonth(objMonth) {
 
   //inserire le festività nella lista
 }
+
 
 
 
