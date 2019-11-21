@@ -14,9 +14,9 @@ function getMonth(monthIndex) {
       if (data.success === true) {
         if (arrObjMonth) {
           console.log('success', arrObjMonth);
-          convertMonth(monthIndex, year, arrObjMonth);
+          evaluateMonthData(monthIndex, year, arrObjMonth);
         } else {
-          convertMonth(monthIndex, year, 'missing data'); //se arrObjMonth non esiste stampa il calendario senza le festività
+          evaluateMonthData(monthIndex, year, 'missing data'); //se arrObjMonth non esiste stampa il calendario senza le festività
         }
       }
     },
@@ -26,30 +26,25 @@ function getMonth(monthIndex) {
   });
 }
 
-//estrapolazione dati num giorni in un mese, nome mesi, anno e 
-//divisione step successivi dati mese e controllo festività
-function convertMonth(monthIndex, yearNum, arrObjMonth) {
-  // aumento per parificare notazione momentjs, senza parseInt error converte in string i dati del Select
-  var monthNum = parseInt(monthIndex) + 1; 
-  var currentMonth = yearNum + '-' + monthNum;
-  var daysInAMonth = moment(currentMonth, "YYYY-MM-DD").daysInMonth();
-  var monthName = moment(currentMonth, "YYYY-MM-DD").format('MMMM');
-  // console.log('daysInAMonth', daysInAMonth, 'monthname', monthName, 'year', yearNum);
-  //ripulisco il container prima di immettere nuovi dati
-  $('.days-container').empty();
-  evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth); 
-  //stampa titolo con mese corrente
-  document.getElementById('current-month').innerText = monthName + ' - ' + yearNum; 
-}
-
-//ciclo in base ai numeri del mese, estrapolando numero del giorno e giorno della settimana
-function evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth) {
+//estrapolazione dati num giorni in un mese,nome giorni settimana, nome mesi etc, elaborazioni e pulizia dati a schermo
+function evaluateMonthData(monthIndex, yearNum, arrObjMonth) {
   var foundFirstMondayOfMonth = false;
+  // increm mese di 1 per parificare notazione momentjs, senza parseInt error converte in string i dati del Select
+  var monthNum = parseInt(monthIndex) + 1;
+  var currentMonth = yearNum + '-' + monthNum;
+  var daysInAMonth = moment(currentMonth, "YYYY-MM").daysInMonth();
+  var monthName = moment(currentMonth, "YYYY-MM").format('MMMM');
+  // console.log('daysInAMonth', daysInAMonth, 'monthname', monthName, 'year', yearNum);
+  //stampa titolo con mese corrente
+  document.getElementById('current-month').innerText = monthName + ' - ' + yearNum;
+  //ripulisco il container prima di immettere nuovi dati mese
+  $('.days-container').empty();
+  //ciclo in base ai numeri del mese, estrapolando numero del giorno, giorno della settimana, e data del giorno per attr
   for (var i = 1; i <= daysInAMonth; i++) {
     var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
     var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
     if (dayOfTheWeek === "lun" && !foundFirstMondayOfMonth) { //used by formatInitialEmptySpace
-      var firstMondayOfMonth = moment(currentDate, 'YYYY-MMMM-D').format('D');
+      var firstMondayOfMonth = moment(currentDate, 'YYYY-MMMM-D').format('D'); 
       foundFirstMondayOfMonth = true;
     }
     // console.log('dayoftheweek', dayOfTheWeek, 'currendata', currentDate);
@@ -61,7 +56,7 @@ function evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth) {
   formatInitialEmptySpace(firstMondayOfMonth);
 }
 
-//stampa calendario a schermo con handlebars
+//stampa il giorno del calendario a schermo con handlebars
 function printCalendar(dayNum, dayOfWeek, currentDate) {
   var source = document.getElementById('calendar-template').innerHTML;
   var calendarTemplate = Handlebars.compile(source);
@@ -106,9 +101,9 @@ function switchMonthBtns(direction) {
       if (index > 0) {
         index--;
         getMonth(index);
-      } 
+      }
       return index;
-    } 
+    }
   } else if (direction === "next") {
     return function (index) {
       if (index == 11) {  // solo 2 uguali perchè selMonth return string
@@ -131,11 +126,11 @@ $(document).ready(function () {
   var prevMonth = switchMonthBtns("prev");
   var nextMonth = switchMonthBtns("next");
 
-  $('.prev-btn').on('click', function() {
+  $('.prev-btn').on('click', function () {
     monthIndex = prevMonth(monthIndex);
   });
 
-  $('.next-btn').on('click', function() {
+  $('.next-btn').on('click', function () {
     monthIndex = nextMonth(monthIndex);
   });
 
