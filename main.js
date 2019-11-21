@@ -1,14 +1,15 @@
 
 
 function getMonth(monthIndex) {
-  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=" + monthIndex;
+  const year = 2018;
+  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=" + year + "&month=" + monthIndex;
   $.ajax({
     url: monthUrl,
     method: "GET",
     success: function (data) {
       var objMonth = data.response;
       console.log('success', objMonth);
-      convertMonth(monthIndex, objMonth);
+      convertMonth(monthIndex, objMonth, year);
     },
     error: function (error) {
       console.log("error", error);
@@ -18,18 +19,14 @@ function getMonth(monthIndex) {
 
 //estrapolazione dati num giorni in un mese, nome mesi, anno e 
 //divisione step successivi dati mese e controllo festività
-function convertMonth(monthIndex, objMonth) {
-  const yearNum = 2018;
+function convertMonth(monthIndex, objMonth, yearNum) {
   var monthNum = monthIndex + 1; // aumento per parificare notazione momentjs
   // var firstDayInMonthDate = objMonth[0].date;
   var currentMonth = yearNum + '-' + monthNum;
   var daysInAMonth = moment(currentMonth, "YYYY-MM-DD").daysInMonth();
   var monthName = moment(currentMonth, "YYYY-MM-DD").format('MMMM');
-  // var yearNum = moment(firstDayInMonthDate, "YYYY-MM-DD").format('YYYY');
-  // console.log('daysInAMonth', daysInAMonth);
-  // console.log('monthname', monthName);
-  // console.log('year', yearNum);
-
+  // console.log('daysInAMonth', daysInAMonth, 'monthname', monthName, 'year', yearNum);
+  //ripulisco il container prima di immettere nuovi dati
   $('.days-container').empty();
   evaluateMonthData(daysInAMonth, monthName, yearNum);
   //stampa titolo con mese corrente
@@ -43,8 +40,7 @@ function evaluateMonthData(daysInAMonth, monthName, yearNum) {
   for (i = 1; i <= daysInAMonth; i++) {
     var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
     var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
-    // console.log('dayoftheweek', dayOfTheWeek);
-    // console.log('currendata', currentDate);
+    // console.log('dayoftheweek', dayOfTheWeek, 'currendata', currentDate);
     printCalendar(i, dayOfTheWeek, currentDate);
   }
 }
@@ -73,16 +69,14 @@ function checkFestivity(objMonth) {
   });
 }
 
+//ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore monthIndex e chiama getMonth con nuovo index mese
 function switchMonthBtns(direction) {
   if (direction === "prev") {
     return function (index) {
       if (index > 0) {
         index--;
         getMonth(index);
-      } else {
-        index = 0;
-        getMonth(index);
-      }
+      } 
       return index;
     }
     
