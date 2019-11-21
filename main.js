@@ -1,6 +1,8 @@
-function getMonth() {
+function getMonth(monthNum) {
+  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=" + monthNum;
   $.ajax({
-    url: "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
+    // url: "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
+    url: monthUrl,
     method: "GET",
     success: function (data) {
       var objMonth = data.response;
@@ -69,7 +71,19 @@ function checkFestivity(objMonth) {
 }
 
 $(document).ready(function () {
-  getMonth();
+  var monthNum = 0;
+  //inizializzo al primo mese 
+  getMonth(monthNum);
+
+  $('.prev-btn').on('click', function() {
+    if (monthNum > 0) {
+      monthNum--;
+      getMonth(monthNum);
+    } else {
+      monthNum = 0;
+      getMonth(monthNum);
+    }
+  })
 });
 
   // objMonth.array.forEach(el => {
