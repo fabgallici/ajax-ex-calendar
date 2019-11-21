@@ -29,7 +29,8 @@ function getMonth(monthIndex) {
 //estrapolazione dati num giorni in un mese, nome mesi, anno e 
 //divisione step successivi dati mese e controllo festività
 function convertMonth(monthIndex, yearNum, arrObjMonth) {
-  var monthNum = monthIndex + 1; // aumento per parificare notazione momentjs
+  // aumento per parificare notazione momentjs, senza parseInt error converte in string i dati del Select
+  var monthNum = parseInt(monthIndex) + 1; 
   var currentMonth = yearNum + '-' + monthNum;
   var daysInAMonth = moment(currentMonth, "YYYY-MM-DD").daysInMonth();
   var monthName = moment(currentMonth, "YYYY-MM-DD").format('MMMM');
@@ -98,7 +99,7 @@ function formatInitialEmptySpace(day) {
   }
 }
 
-//ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore monthIndex e chiama getMonth con nuovo index mese
+// ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore monthIndex e chiama getMonth con nuovo index mese
 function switchMonthBtns(direction) {
   if (direction === "prev") {
     return function (index) {
@@ -110,7 +111,7 @@ function switchMonthBtns(direction) {
     } 
   } else if (direction === "next") {
     return function (index) {
-      if (index === 11) {
+      if (index == 11) {  // solo 2 uguali perchè selMonth return string
         index = 0;
         getMonth(index);
       } else {
@@ -137,5 +138,12 @@ $(document).ready(function () {
   $('.next-btn').on('click', function() {
     monthIndex = nextMonth(monthIndex);
   });
+
+  $('#select-month').change(function () {
+    var selMonth = $(this).val();
+    monthIndex = selMonth;
+
+    getMonth(monthIndex);
+  })
 
 });
