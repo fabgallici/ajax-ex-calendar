@@ -27,28 +27,28 @@ function convertMonth(objMonth) {
   console.log('monthname', monthName);
   console.log('year', yearNum);
   
-  for (i = 1; i <= daysInAMonth; i++) {
-    //creare una data del giorno es 2018-01-01 da usare come attributo
-    var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
-    var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
-    console.log('dayoftheweek', dayOfTheWeek);
-    console.log('currendata', currentDate);
-    var currentDayObj = new DayObj(i, dayOfTheWeek, currentDate);
-    console.log(currentDayObj);
-    printCalendar(currentDayObj);
-    // printCalendar(i, monthName, currentDate);
-    // console.log(i, monthName);
-  }
 
+  evaluateMonthData(daysInAMonth, monthName, yearNum);
   //stampa titolo con mese corrente
   document.getElementById('current-month').innerText = monthName + ' - ' + yearNum;
   //inserire le festività nella lista
   checkFestivity(objMonth);
 }
 
-function evaluateMonthData() {
+function evaluateMonthData(daysInAMonth, monthName, yearNum) {
   //da pensare come dividere func
-
+  for (i = 1; i <= daysInAMonth; i++) {
+    //creare una data del giorno es 2018-01-01 da usare come attributo
+    var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
+    var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
+    console.log('dayoftheweek', dayOfTheWeek);
+    console.log('currendata', currentDate);
+    // var currentDayObj = new DayObj(i, dayOfTheWeek, currentDate);
+    console.log(currentDayObj);
+    // printCalendar(currentDayObj);
+    printCalendar(i, dayOfTheWeek, currentDate);
+    // console.log(i, monthName);
+  }
 }
 function DayObj(dayNum, dayOfWeek, currentDate) {
   this.dayNum = dayNum;
@@ -56,15 +56,15 @@ function DayObj(dayNum, dayOfWeek, currentDate) {
   this.currentDate = currentDate;
 }
 
-function printCalendar(dayObj) {
+
+  function printCalendar(dayNum, dayOfWeek, currentDate) {
   var source = document.getElementById('calendar-template').innerHTML;
   var calendarTemplate = Handlebars.compile(source);
   // var calendarData = { dayNumber: day, monthName: monthName};
-  var calendarData = dayObj;
+  var calendarData = { dayNum: dayNum, dayOfWeek: dayOfWeek, currentDate: currentDate };
   var htmlcalendarData = calendarTemplate(calendarData);
   $('.container.days-container').append(htmlcalendarData);
 }
-
 
 
 function checkFestivity(objMonth) {
@@ -89,11 +89,13 @@ $(document).ready(function () {
 
   // });
 
-  // function printCalendar(dayNum, dayOfWeek, currentDate) {
+
+
+// function printCalendar(dayObj) {
 //   var source = document.getElementById('calendar-template').innerHTML;
 //   var calendarTemplate = Handlebars.compile(source);
 //   // var calendarData = { dayNumber: day, monthName: monthName};
-//   var calendarData = { dayNum: dayNum, dayOfWeek: dayOfWeek, currentDate: currentDate };
+//   var calendarData = dayObj;
 //   var htmlcalendarData = calendarTemplate(calendarData);
 //   $('.container.days-container').append(htmlcalendarData);
 // }
