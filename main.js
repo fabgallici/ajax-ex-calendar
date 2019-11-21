@@ -29,6 +29,7 @@ function convertMonth(monthIndex, objMonth) {
   // console.log('monthname', monthName);
   // console.log('year', yearNum);
 
+  $('.days-container').empty();
   evaluateMonthData(daysInAMonth, monthName, yearNum);
   //stampa titolo con mese corrente
   document.getElementById('current-month').innerText = monthName + ' - ' + yearNum;
