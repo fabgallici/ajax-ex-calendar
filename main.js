@@ -1,5 +1,5 @@
-function getMonth(monthNum) {
-  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=" + monthNum;
+function getMonth(monthIndex) {
+  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=" + monthIndex;
   $.ajax({
     // url: "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
     url: monthUrl,
@@ -7,7 +7,7 @@ function getMonth(monthNum) {
     success: function (data) {
       var objMonth = data.response;
       console.log('success', objMonth);
-      convertMonth(objMonth);
+      convertMonth(monthIndex, objMonth);
     },
     error: function (error) {
       console.log("error", error);
@@ -17,11 +17,14 @@ function getMonth(monthNum) {
 
 //estrapolazione dati num giorni in un mese, nome mesi, anno e 
 //divisione step successivi dati mese e controllo festività
-function convertMonth(objMonth) {
-  var firstDayInMonthDate = objMonth[0].date;
-  var daysInAMonth = moment(firstDayInMonthDate, "YYYY-MM-DD").daysInMonth();
-  var monthName = moment(firstDayInMonthDate, "YYYY-MM-DD").format('MMMM');
-  var yearNum = moment(firstDayInMonthDate, "YYYY-MM-DD").format('YYYY');
+function convertMonth(monthIndex, objMonth) {
+  const yearNum = 2018;
+  var monthNum = monthIndex + 1; // aumento per parificare notazione momentjs
+  // var firstDayInMonthDate = objMonth[0].date;
+  var currentMonth = yearNum + '-' + monthNum;
+  var daysInAMonth = moment(currentMonth, "YYYY-MM-DD").daysInMonth();
+  var monthName = moment(currentMonth, "YYYY-MM-DD").format('MMMM');
+  // var yearNum = moment(firstDayInMonthDate, "YYYY-MM-DD").format('YYYY');
   // console.log('daysInAMonth', daysInAMonth);
   // console.log('monthname', monthName);
   // console.log('year', yearNum);
@@ -71,17 +74,27 @@ function checkFestivity(objMonth) {
 }
 
 $(document).ready(function () {
-  var monthNum = 0;
+  var monthIndex = 0;
   //inizializzo al primo mese 
-  getMonth(monthNum);
+  getMonth(monthIndex);
 
   $('.prev-btn').on('click', function() {
-    if (monthNum > 0) {
-      monthNum--;
-      getMonth(monthNum);
+    if (monthIndex > 0) {
+      monthIndex--;
+      getMonth(monthIndex);
     } else {
-      monthNum = 0;
-      getMonth(monthNum);
+      monthIndex = 0;
+      getMonth(monthIndex);
+    }
+  })
+
+  $('.next-btn').on('click', function () {
+    if (monthIndex <= 11) {
+      monthIndex++;
+      getMonth(monthIndex);
+    } else {
+      monthIndex = 0;
+      getMonth(monthIndex);
     }
   })
 });
