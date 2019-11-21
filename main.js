@@ -47,11 +47,11 @@ function evaluateMonthData() {
 
 }
 
-function printCalendar(day, monthName, currentDate) {
+function printCalendar(dayNum, dayOfWeek, currentDate) {
   var source = document.getElementById('calendar-template').innerHTML;
   var calendarTemplate = Handlebars.compile(source);
   // var calendarData = { dayNumber: day, monthName: monthName};
-  var calendarData = { dayNumber: day, monthName: monthName, currentDate: currentDate };
+  var calendarData = { dayNum: dayNum, dayOfWeek: dayOfWeek, currentDate: currentDate };
   var htmlcalendarData = calendarTemplate(calendarData);
   $('.container.days-container').append(htmlcalendarData);
 }
