@@ -1,4 +1,4 @@
-var monthIndex = 0;
+
 
 function getMonth(monthIndex) {
   var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=" + monthIndex;
@@ -40,9 +40,7 @@ function convertMonth(monthIndex, objMonth) {
 
 //ciclo in base ai numeri del mese, estrapolando numero del giorno e giorno della settimana
 function evaluateMonthData(daysInAMonth, monthName, yearNum) {
-  //da pensare come dividere func
   for (i = 1; i <= daysInAMonth; i++) {
-    //creare una data del giorno es 2018-01-01 da usare come attributo
     var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
     var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
     // console.log('dayoftheweek', dayOfTheWeek);
@@ -77,73 +75,45 @@ function checkFestivity(objMonth) {
 
 function switchMonthBtns(direction) {
   if (direction === "prev") {
-    return function () {
-      if (monthIndex > 0) {
-        monthIndex--;
-        getMonth(monthIndex);
+    return function (index) {
+      if (index > 0) {
+        index--;
+        getMonth(index);
       } else {
-        monthIndex = 0;
-        getMonth(monthIndex);
+        index = 0;
+        getMonth(index);
       }
+      return index;
     }
     
   } else if (direction === "next") {
-    return function () {
-      if (monthIndex === 11) {
-        monthIndex = 0;
-        getMonth(monthIndex);
+    return function (index) {
+      if (index === 11) {
+        index = 0;
+        getMonth(index);
       } else {
-        monthIndex++;
-        getMonth(monthIndex);
+        index++;
+        getMonth(index);
       }
+      return index;
     }
   }
 }
 
 $(document).ready(function () {
-  
+  var monthIndex = 0;
   //inizializzo al primo mese 
   getMonth(monthIndex);
 
   var prevMonth = switchMonthBtns("prev");
   var nextMonth = switchMonthBtns("next");
 
-  $('.prev-btn').on('click', prevMonth);
+  $('.prev-btn').on('click', function() {
+    monthIndex = prevMonth(monthIndex);
+  });
 
-  $('.next-btn').on('click', nextMonth);
+  $('.next-btn').on('click', function() {
+    monthIndex = nextMonth(monthIndex);
+  });
 
-  // $('.prev-btn').on('click', function() {
-  //   if (monthIndex > 0) {
-  //     monthIndex--;
-  //     getMonth(monthIndex);
-  //   } else {
-  //     monthIndex = 0;
-  //     getMonth(monthIndex);
-  //   }
-  // })
-
-  // $('.next-btn').on('click', function () {
-  //   if (monthIndex === 11) {
-  //     monthIndex = 0;
-  //     getMonth(monthIndex);
-  //   } else {
-  //     monthIndex++;
-  //     getMonth(monthIndex);
-  //   }
-  // })
 });
-
-  // objMonth.array.forEach(el => {
-
-  // });
-
-
-
-// function printCalendar(dayObj) {
-//   var source = document.getElementById('calendar-template').innerHTML;
-//   var calendarTemplate = Handlebars.compile(source);
-//   // var calendarData = { dayNumber: day, monthName: monthName};
-//   var calendarData = dayObj;
-//   var htmlcalendarData = calendarTemplate(calendarData);
-//   $('.container.days-container').append(htmlcalendarData);
-// }
