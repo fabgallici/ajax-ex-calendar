@@ -9,9 +9,16 @@ function getMonth(monthIndex) {
     url: monthUrl,
     method: "GET",
     success: function (data) {
-      var objMonth = data.response;
-      console.log('success', objMonth);
-      convertMonth(monthIndex, year, objMonth);
+      var arrObjMonth = data.response;
+      // arrObjMonth = null; //test missing data
+      if (data.success === true) {
+        if (arrObjMonth) {
+          console.log('success', arrObjMonth);
+          convertMonth(monthIndex, year, arrObjMonth);
+        } else {
+          convertMonth(monthIndex, year, 'missing data'); //se arrObjMonth non esiste stampa il calendario senza le festività
+        }
+      }
     },
     error: function (error) {
       console.log("error", error);
@@ -21,22 +28,21 @@ function getMonth(monthIndex) {
 
 //estrapolazione dati num giorni in un mese, nome mesi, anno e 
 //divisione step successivi dati mese e controllo festività
-function convertMonth(monthIndex, yearNum, objMonth) {
+function convertMonth(monthIndex, yearNum, arrObjMonth) {
   var monthNum = monthIndex + 1; // aumento per parificare notazione momentjs
-  // var firstDayInMonthDate = objMonth[0].date;
   var currentMonth = yearNum + '-' + monthNum;
   var daysInAMonth = moment(currentMonth, "YYYY-MM-DD").daysInMonth();
   var monthName = moment(currentMonth, "YYYY-MM-DD").format('MMMM');
   // console.log('daysInAMonth', daysInAMonth, 'monthname', monthName, 'year', yearNum);
   //ripulisco il container prima di immettere nuovi dati
   $('.days-container').empty();
-  evaluateMonthData(daysInAMonth, monthName, yearNum, objMonth);
+  evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth);
   //stampa titolo con mese corrente
   document.getElementById('current-month').innerText = monthName + ' - ' + yearNum; 
 }
 
 //ciclo in base ai numeri del mese, estrapolando numero del giorno e giorno della settimana
-function evaluateMonthData(daysInAMonth, monthName, yearNum, objMonth) {
+function evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth) {
   for (i = 1; i <= daysInAMonth; i++) {
     var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
     var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
@@ -44,7 +50,7 @@ function evaluateMonthData(daysInAMonth, monthName, yearNum, objMonth) {
     printCalendar(i, dayOfTheWeek, currentDate);
   }
   //inserire le festività presenti nel calendario
-  checkFestivity(objMonth);
+  checkFestivity(arrObjMonth);
 }
 
 //stampa calendario a schermo con handlebars
@@ -57,18 +63,22 @@ function printCalendar(dayNum, dayOfWeek, currentDate) {
 }
 
 //controlla festività presenti e le associa all'attributo html corrispondente
-function checkFestivity(objMonth) {
-  objMonth.forEach(el => {
-    var festName = el.name;
-    var date = el.date;
-    console.log('festname', festName, date);
-    //aggiungo festività in pagina e cambio bg-color cella
-    $(`.date[data-name="${date}"]`)
-      .html(festName)
-      .closest('.days')
-      .addClass('bg-fest');
+function checkFestivity(arrObjMonth) {
+  if (Array.isArray(arrObjMonth)) {
+    arrObjMonth.forEach(el => {
+      var festName = el.name;
+      var date = el.date;
+      // console.log('festname', festName, date);
+      //aggiungo festività in pagina e cambio bg-color cella
+      $(`.date[data-name="${date}"]`)
+        .html(festName)
+        .closest('.days')
+        .addClass('bg-fest');
 
-  });
+    });
+  } else {
+    console.log('festivity missing data');
+  }
 }
 
 //ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore monthIndex e chiama getMonth con nuovo index mese
