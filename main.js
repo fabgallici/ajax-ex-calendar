@@ -1,7 +1,8 @@
+var monthIndex = 0;
+
 function getMonth(monthIndex) {
   var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=" + monthIndex;
   $.ajax({
-    // url: "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
     url: monthUrl,
     method: "GET",
     success: function (data) {
@@ -74,30 +75,65 @@ function checkFestivity(objMonth) {
   });
 }
 
+function switchMonthBtns(direction) {
+  if (direction === "prev") {
+    return function () {
+      if (monthIndex > 0) {
+        monthIndex--;
+        getMonth(monthIndex);
+      } else {
+        monthIndex = 0;
+        getMonth(monthIndex);
+      }
+    }
+    
+  } else if (direction === "next") {
+    return function () {
+      if (monthIndex === 11) {
+        monthIndex = 0;
+        getMonth(monthIndex);
+      } else {
+        monthIndex++;
+        getMonth(monthIndex);
+      }
+    }
+  }
+}
+
 $(document).ready(function () {
-  var monthIndex = 0;
+  
   //inizializzo al primo mese 
   getMonth(monthIndex);
 
   $('.prev-btn').on('click', function() {
-    if (monthIndex > 0) {
-      monthIndex--;
-      getMonth(monthIndex);
-    } else {
-      monthIndex = 0;
-      getMonth(monthIndex);
-    }
+    var prevMonth = switchMonthBtns("prev");
+    prevMonth();
   })
 
   $('.next-btn').on('click', function () {
-    if (monthIndex === 11) {
-      monthIndex = 0;
-      getMonth(monthIndex);
-    } else {
-      monthIndex++;
-      getMonth(monthIndex);
-    }
+    var nextMonth = switchMonthBtns("next");
+    nextMonth();
   })
+
+  // $('.prev-btn').on('click', function() {
+  //   if (monthIndex > 0) {
+  //     monthIndex--;
+  //     getMonth(monthIndex);
+  //   } else {
+  //     monthIndex = 0;
+  //     getMonth(monthIndex);
+  //   }
+  // })
+
+  // $('.next-btn').on('click', function () {
+  //   if (monthIndex === 11) {
+  //     monthIndex = 0;
+  //     getMonth(monthIndex);
+  //   } else {
+  //     monthIndex++;
+  //     getMonth(monthIndex);
+  //   }
+  // })
 });
 
   // objMonth.array.forEach(el => {
