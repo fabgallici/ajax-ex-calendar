@@ -90,11 +90,11 @@ $(document).ready(function () {
   })
 
   $('.next-btn').on('click', function () {
-    if (monthIndex <= 11) {
-      monthIndex++;
+    if (monthIndex === 11) {
+      monthIndex = 0;
       getMonth(monthIndex);
     } else {
-      monthIndex = 0;
+      monthIndex++;
       getMonth(monthIndex);
     }
   })
