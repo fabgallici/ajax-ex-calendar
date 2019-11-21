@@ -40,6 +40,7 @@ body {
   justify-content: flex-start;
   flex-wrap: wrap;
   padding: 50px 0;
+  width: 1050px;
 }
 
 .days {
@@ -47,7 +48,7 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     flex-direction: column;
-    flex-basis: 200px;
+    flex-basis: 150px;
     padding: 10px;
     /* margin: 10px 20px; */
     height: 100px;

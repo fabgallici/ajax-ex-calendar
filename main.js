@@ -36,14 +36,43 @@ function convertMonth(monthIndex, yearNum, arrObjMonth) {
   // console.log('daysInAMonth', daysInAMonth, 'monthname', monthName, 'year', yearNum);
   //ripulisco il container prima di immettere nuovi dati
   $('.days-container').empty();
-  evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth);
+  formatInitialEmptySpace(daysInAMonth, monthName, yearNum, arrObjMonth)
+  // evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth); // SKIP
   //stampa titolo con mese corrente
   document.getElementById('current-month').innerText = monthName + ' - ' + yearNum; 
 }
 
+//funzione opzionale calcola eventuali spazi bianchi da inserire prima del primo lunedì del mese per impaginazione
+//possibilità di saltare passaggio commentandola, in più riattivare eVMonthData funz preced // SKIP
+function formatInitialEmptySpace(daysInAMonth, monthName, yearNum, arrObjMonth) {
+  const daysInAWeek = 7;
+  var currentWeekDay, whiteSpaces;
+  var found = false;
+  var day = 1;
+  var daysBeforeMonday = 0;
+  while (!found) {
+    currentWeekDay = moment(yearNum + '-' + monthName + '-' + day, 'YYYY-MMMM-D').format('ddd');
+    // console.log(currentWeekDay);
+    if (currentWeekDay === "lun") {
+      found = true;
+    } else {
+      day++;
+    }  
+  }
+  var daysBeforeMonday = day -1;
+  // console.log('giorni prima del primo lunedì', daysBeforeMonday);
+  if (daysBeforeMonday > 0) {
+    whiteSpaces = daysInAWeek - daysBeforeMonday;
+    for (var j = 1; j <= whiteSpaces; j++) {
+      printCalendar();
+    }
+  }
+  evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth);
+}
+
 //ciclo in base ai numeri del mese, estrapolando numero del giorno e giorno della settimana
 function evaluateMonthData(daysInAMonth, monthName, yearNum, arrObjMonth) {
-  for (i = 1; i <= daysInAMonth; i++) {
+  for (var i = 1; i <= daysInAMonth; i++) {
     var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
     var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
     // console.log('dayoftheweek', dayOfTheWeek, 'currendata', currentDate);
