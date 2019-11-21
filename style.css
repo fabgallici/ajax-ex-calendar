@@ -44,17 +44,21 @@ body {
 
 .days {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
     flex-direction: column;
     flex-basis: 200px;
-    padding: 20px;
-    margin: 10px 20px;
-    height: 200px;
+    padding: 10px;
+    /* margin: 10px 20px; */
+    height: 100px;
     text-align: center;
     font-size: 1.2rem;
+    border: 1px solid #F5F5F5;
 }
 
+.days .date {
+  align-self: flex-end;
+}
 .bg-fest {
   background-color: lightblue;
 }

@@ -26,8 +26,10 @@
     <!-- music template handlebars -->
     <script id="calendar-template" type="text/x-handlebars-template">
       <div class="days">
-        <span class="day-num">{{dayNum}}</span>
-        <span class="day-of-week">{{dayOfWeek}}</span>
+        <div class="day">
+          <span class="day-num">{{dayNum}}</span>
+          <span class="day-of-week">{{dayOfWeek}}</span>
+        </div>    
         <span class="date" data-name="{{currentDate}}"></span>
       </div>
     </script>
