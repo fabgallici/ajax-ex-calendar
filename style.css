@@ -5,12 +5,18 @@
   box-sizing: border-box;
 }
 
+
 body {
   background: #fff;
   min-height: 100vh;
   font-size: 18px;
 }
-
+#current-month{
+   padding: 20px;
+   font-size: 1.5rem;
+   text-align: center;
+   text-transform: capitalize;
+}
 .container {
   width: 1070px;
   height: 100%;

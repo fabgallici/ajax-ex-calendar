@@ -22,7 +22,7 @@ function convertMonth(objMonth) {
   var daysInAMonth = moment(firstDayInMonthDate, "YYYY-MM-DD").daysInMonth();
   var monthName = moment(firstDayInMonthDate, "YYYY-MM-DD").format('MMMM');
   var yearNum = moment(firstDayInMonthDate, "YYYY-MM-DD").format('YYYY');
-  var dayOfTheWeek = moment(firstDayInMonthDate, "YYYY-MM-DD").format('ddd');
+  var dayOfTheWeek = moment(firstDayInMonthDate, "YYYY-MM-DD").format('DDD');
   console.log(firstDayInMonthDate);
   console.log('daysInAMonth', daysInAMonth);
   console.log('monthname', monthName);
@@ -36,6 +36,8 @@ function convertMonth(objMonth) {
     // console.log(i, monthName);
   }
 
+  //stampa titolo con mese corrente
+  document.getElementById('current-month').innerText = monthName + ' - ' + yearNum;
   //inserire le festività nella lista
   checkFestivity(objMonth);
 }
