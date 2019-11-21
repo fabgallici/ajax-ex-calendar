@@ -105,15 +105,12 @@ $(document).ready(function () {
   //inizializzo al primo mese 
   getMonth(monthIndex);
 
-  $('.prev-btn').on('click', function() {
-    var prevMonth = switchMonthBtns("prev");
-    prevMonth();
-  })
+  var prevMonth = switchMonthBtns("prev");
+  var nextMonth = switchMonthBtns("next");
 
-  $('.next-btn').on('click', function () {
-    var nextMonth = switchMonthBtns("next");
-    nextMonth();
-  })
+  $('.prev-btn').on('click', prevMonth);
+
+  $('.next-btn').on('click', nextMonth);
 
   // $('.prev-btn').on('click', function() {
   //   if (monthIndex > 0) {
