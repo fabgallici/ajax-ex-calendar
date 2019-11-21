@@ -13,6 +13,8 @@ function getMonth() {
   });
 }
 
+//estrapolazione dati num giorni in un mese, nome mesi, anno e 
+//divisione step successivi dati mese e controllo festività
 function convertMonth(objMonth) {
   var firstDayInMonthDate = objMonth[0].date;
   var daysInAMonth = moment(firstDayInMonthDate, "YYYY-MM-DD").daysInMonth();
