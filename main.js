@@ -43,7 +43,7 @@ function convertMonth(monthIndex, yearNum, arrObjMonth) {
 }
 
 //funzione opzionale calcola eventuali spazi bianchi da inserire prima del primo lunedì del mese per impaginazione
-//possibilità di saltare passaggio commentandola, in più riattivare eVMonthData funz preced // SKIP
+//possibilità di saltare passaggio commentandola e riattivando eVMonthData funz preced // SKIP
 function formatInitialEmptySpace(daysInAMonth, monthName, yearNum, arrObjMonth) {
   const daysInAWeek = 7;
   var currentWeekDay, whiteSpaces;
