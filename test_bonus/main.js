@@ -52,7 +52,8 @@ function getCalendarData(calObj) {
 
 function getFestAjax(calObj) {
   var monthIndex = calObj.monthIndex;
-  var year = calObj.yearNum;
+  var year = calObj.year;
+  console.log('ajax ', monthIndex, year);
   var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=" + year + "&month=" + monthIndex;
   $.ajax({
     url: monthUrl,
