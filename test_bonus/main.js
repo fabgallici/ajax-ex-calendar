@@ -3,8 +3,12 @@ gestendo il caso in cui l’API non possa ritornare festività.
 Il calendario partirà da gennaio 2018 e si concluderà a dicembre 2018(unici dati disponibili sull’API). */
 
 
-//estrapolazione dati num giorni in un mese,nome giorni settimana, nome mesi etc, elaborazioni e pulizia dati a schermo
-function evMonthData(monthIndex, yearNum) {
+
+//estrapolazione dati num giorni in un mese,nome giorni settimana, nome mesi etc, 
+//elaborazioni e pulizia dati a schermo
+function evMonthData(calObj) {
+  var monthIndex = calObj.monthIndex;
+  var yearNum = calObj.year;
   var foundFirstMondayOfMonth = false;
   // increm mese di 1 per parificare notazione momentjs, senza parseInt error converte in string i dati del Select
   var monthNum = parseInt(monthIndex) + 1;
@@ -28,12 +32,27 @@ function evMonthData(monthIndex, yearNum) {
     printCalendar(i, dayOfTheWeek, currentDate);
   }
   //inserire le festività presenti nel calendario
-  getFestAjax(monthIndex, yearNum)
+  // getFestAjax(monthIndex, yearNum)
+  getCalendarData(calObj);
   //creo celle vuote format lunedì primo elemento
   formatInitialEmptySpace(firstMondayOfMonth);
 }
 
-function getFestAjax(monthIndex, year) {
+//controllo se ci sono dati caricati precedentemente in memoria sulla festività del mese,
+//altrimenti interrogo l'api e li richiedo.
+function getCalendarData(calObj) {
+  var monthIndex = calObj.monthIndex;
+  var currMonthFest = calObj.festivity[monthIndex];
+  if (currMonthFest === 0) {
+    getFestAjax(calObj);
+  } else {
+    checkFestivity(currMonthFest);
+  }
+}
+
+function getFestAjax(calObj) {
+  var monthIndex = calObj.monthIndex;
+  var year = calObj.yearNum;
   var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=" + year + "&month=" + monthIndex;
   $.ajax({
     url: monthUrl,
@@ -45,7 +64,9 @@ function getFestAjax(monthIndex, year) {
       if (data.success === true) {
         if (arrObjMonth) {
           console.log('success', arrObjMonth);
-          checkFestivity(arrObjMonth)
+          checkFestivity(arrObjMonth);
+          //aggiorno oggetto
+          calObj.festivity[monthIndex].push(arrObjMonth);
         } else {
           checkFestivity('missing data');
         }
@@ -117,30 +138,48 @@ function switchMonthBtns(direction) {
   }
 }
 
+var Calendar = function (monthIndex, year) {
+  this.monthIndex = monthIndex;
+  this.year = year;
+}
+
+Calendar.prototype.fillEmptyFest = function() {
+  this.festivity = Array(12).fill(0);
+}
+
 $(document).ready(function () {
   var monthIndex = 0;
   const year = 2018;
+
+  var calObj = new Calendar(monthIndex, year);
+  calObj.fillEmptyFest();
+  console.log(calObj);
   //inizializzo all'index primo mese 
-  evMonthData(monthIndex, year);
+  evMonthData(calObj);
 
   var prevMonth = switchMonthBtns("prev");
   var nextMonth = switchMonthBtns("next");
 
   $('.prev-btn').on('click', function () {
     monthIndex = prevMonth(monthIndex);
-    evMonthData(monthIndex, year);
+    console.log(monthIndex);
+    calObj.monthIndex = monthIndex;
+    evMonthData(calObj);
   });
 
   $('.next-btn').on('click', function () {
     monthIndex = nextMonth(monthIndex);
-    evMonthData(monthIndex, year);
+    console.log(monthIndex);
+    calObj.monthIndex = monthIndex;
+    evMonthData(calObj);
   });
 
   $('#select-month').change(function () {
     var selMonth = $(this).val();
     monthIndex = selMonth;
+    calObj.monthIndex = monthIndex;
 
-    evMonthData(monthIndex, year);
+    evMonthData(calObj);
   })
 
 });
