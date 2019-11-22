@@ -24,6 +24,7 @@ function getMonth(monthIndex) {
     },
     error: function (error) {
       console.log("error", error);
+      evaluateMonthData(monthIndex, year, 'data error');
     }
   });
 }
