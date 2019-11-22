@@ -73,7 +73,7 @@ function checkFestivity(arrObjMonth) {
 
     });
   } else {
-    console.log('festivity missing data');
+    console.log('ajax error : ', arrObjMonth);
   }
 }
 
