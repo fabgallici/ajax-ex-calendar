@@ -9,6 +9,7 @@ function getMonth(monthIndex) {
     url: monthUrl,
     method: "GET",
     success: function (data) {
+      // console.log(data);
       var arrObjMonth = data.response;
       // arrObjMonth = null; //test missing data
       if (data.success === true) {
@@ -16,6 +17,7 @@ function getMonth(monthIndex) {
           console.log('success', arrObjMonth);
           evaluateMonthData(monthIndex, year, arrObjMonth);
         } else {
+          arrObjMonth = null;  //? atrim se non esiste da errore, quindi lo setto già io inesistente
           evaluateMonthData(monthIndex, year, 'missing data'); //se arrObjMonth non esiste stampa il calendario senza le festività
         }
       }
