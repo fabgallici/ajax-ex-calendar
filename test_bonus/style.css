@@ -1,0 +1,69 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lato", sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fff;
+  min-height: 100vh;
+  font-size: 18px;
+}
+.control-panel {
+  padding-top: 20px;
+  width: 600px;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
+.ctrl-btn {
+  width: 170px;
+  padding: 5px 10px;
+  font-size: 1.1rem;
+}
+#select-month {
+  width: 180px;
+  font-size: 1.2rem;
+}
+#current-month {
+  width: 600px;
+  margin: auto;
+  padding-top: 40px;
+  font-size: 1.5rem;
+  text-align: center;
+  text-transform: capitalize;
+}
+.container {
+  width: 1070px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.days-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 50px 0;
+  width: 1050px;
+}
+
+.days {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  flex-basis: 150px;
+  padding: 10px;
+  height: 100px;
+  text-align: center;
+  font-size: 1.2rem;
+  border: 1px solid #f5f5f5;
+}
+
+.days .date {
+  align-self: flex-end;
+}
+.bg-fest {
+  background-color: lightblue;
+}

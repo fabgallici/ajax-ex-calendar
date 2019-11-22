@@ -2,34 +2,9 @@
 gestendo il caso in cui l’API non possa ritornare festività.
 Il calendario partirà da gennaio 2018 e si concluderà a dicembre 2018(unici dati disponibili sull’API). */
 
-function getMonth(monthIndex) {
-  const year = 2018;
-  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=" + year + "&month=" + monthIndex;
-  $.ajax({
-    url: monthUrl,
-    method: "GET",
-    success: function (data) {
-      // console.log(data);
-      var arrObjMonth = data.response;
-      // arrObjMonth = null; //test missing data
-      if (data.success === true) {
-        if (arrObjMonth) {
-          console.log('success', arrObjMonth);
-          evaluateMonthData(monthIndex, year, arrObjMonth);
-        } else {
-          evaluateMonthData(monthIndex, year, 'missing data'); //se arrObjMonth non esiste stampa il calendario senza le festività
-        }
-      }
-    },
-    error: function (error) {
-      console.log("error", error);
-      evaluateMonthData(monthIndex, year, 'data error');
-    }
-  });
-}
 
 //estrapolazione dati num giorni in un mese,nome giorni settimana, nome mesi etc, elaborazioni e pulizia dati a schermo
-function evaluateMonthData(monthIndex, yearNum, arrObjMonth) {
+function evMonthData(monthIndex, yearNum) {
   var foundFirstMondayOfMonth = false;
   // increm mese di 1 per parificare notazione momentjs, senza parseInt error converte in string i dati del Select
   var monthNum = parseInt(monthIndex) + 1;
@@ -46,25 +21,41 @@ function evaluateMonthData(monthIndex, yearNum, arrObjMonth) {
     var currentDate = moment(yearNum + '-' + monthName + '-' + i, 'YYYY-MMMM-D').format('YYYY-MM-DD');
     var dayOfTheWeek = moment(currentDate, "YYYY-MM-DD").format('ddd');
     if (dayOfTheWeek === "lun" && !foundFirstMondayOfMonth) { //used by formatInitialEmptySpace
-      var firstMondayOfMonth = moment(currentDate, 'YYYY-MMMM-D').format('D'); 
+      var firstMondayOfMonth = moment(currentDate, 'YYYY-MMMM-D').format('D');
       foundFirstMondayOfMonth = true;
     }
     // console.log('dayoftheweek', dayOfTheWeek, 'currendata', currentDate);
     printCalendar(i, dayOfTheWeek, currentDate);
   }
   //inserire le festività presenti nel calendario
-  checkFestivity(arrObjMonth);
+  getFestAjax(monthIndex, yearNum)
   //creo celle vuote format lunedì primo elemento
   formatInitialEmptySpace(firstMondayOfMonth);
 }
 
-//stampa il giorno del calendario a schermo con handlebars
-function printCalendar(dayNum, dayOfWeek, currentDate) {
-  var source = document.getElementById('calendar-template').innerHTML;
-  var calendarTemplate = Handlebars.compile(source);
-  var calendarData = { dayNum: dayNum, dayOfWeek: dayOfWeek, currentDate: currentDate };
-  var htmlcalendarData = calendarTemplate(calendarData);
-  $('.container.days-container').append(htmlcalendarData);
+function getFestAjax(monthIndex, year) {
+  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=" + year + "&month=" + monthIndex;
+  $.ajax({
+    url: monthUrl,
+    method: "GET",
+    success: function (data) {
+      // console.log(data);
+      var arrObjMonth = data.response;
+      // arrObjMonth = null; //test missing data
+      if (data.success === true) {
+        if (arrObjMonth) {
+          console.log('success', arrObjMonth);
+          checkFestivity(arrObjMonth)
+        } else {
+          checkFestivity('missing data');
+        }
+      }
+    },
+    error: function (error) {
+      console.log("error", error);
+      checkFestivity('data error');
+    }
+  });
 }
 
 //controlla festività presenti e le associa all'attributo html corrispondente
@@ -86,6 +77,15 @@ function checkFestivity(arrObjMonth) {
   }
 }
 
+//stampa il giorno del calendario a schermo con handlebars
+function printCalendar(dayNum, dayOfWeek, currentDate) {
+  var source = document.getElementById('calendar-template').innerHTML;
+  var calendarTemplate = Handlebars.compile(source);
+  var calendarData = { dayNum: dayNum, dayOfWeek: dayOfWeek, currentDate: currentDate };
+  var htmlcalendarData = calendarTemplate(calendarData);
+  $('.container.days-container').append(htmlcalendarData);
+}
+
 //funzione opzionale calcola eventuali spazi bianchi per formattazione lunedì primo elemento
 function formatInitialEmptySpace(day) {
   if (day > 1) {
@@ -96,13 +96,12 @@ function formatInitialEmptySpace(day) {
   }
 }
 
-// ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore monthIndex e chiama getMonth con nuovo index mese
+// ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore monthIndex e chiama getFestAjax con nuovo index mese
 function switchMonthBtns(direction) {
   if (direction === "prev") {
     return function (index) {
       if (index > 0) {
         index--;
-        getMonth(index);
       }
       return index;
     }
@@ -110,10 +109,8 @@ function switchMonthBtns(direction) {
     return function (index) {
       if (index == 11) {  // solo 2 uguali perchè selMonth return string
         index = 0;
-        getMonth(index);
       } else {
         index++;
-        getMonth(index);
       }
       return index;
     }
@@ -122,25 +119,28 @@ function switchMonthBtns(direction) {
 
 $(document).ready(function () {
   var monthIndex = 0;
+  const year = 2018;
   //inizializzo all'index primo mese 
-  getMonth(monthIndex);
+  evMonthData(monthIndex, year);
 
   var prevMonth = switchMonthBtns("prev");
   var nextMonth = switchMonthBtns("next");
 
   $('.prev-btn').on('click', function () {
     monthIndex = prevMonth(monthIndex);
+    evMonthData(monthIndex, year);
   });
 
   $('.next-btn').on('click', function () {
     monthIndex = nextMonth(monthIndex);
+    evMonthData(monthIndex, year);
   });
 
   $('#select-month').change(function () {
     var selMonth = $(this).val();
     monthIndex = selMonth;
 
-    getMonth(monthIndex);
+    evMonthData(monthIndex, year);
   })
 
 });
