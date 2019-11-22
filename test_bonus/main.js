@@ -50,17 +50,16 @@ function getCalendarData(calObj) {
   }
 }
 
+//chiamata ajax get 
 function getFestAjax(calObj) {
   var monthIndex = calObj.monthIndex;
   var year = calObj.year;
-  console.log('ajax ', monthIndex, year);
-  var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=" + year + "&month=" + monthIndex;
   $.ajax({
     url: "https://flynn.boolean.careers/exercises/api/holidays",
     method: "GET",
     data: {
-      year: calObj.year,
-      month: calObj.monthIndex
+      year: year,
+      month: monthIndex
     },
     success: function (data) {
       // console.log(data);
