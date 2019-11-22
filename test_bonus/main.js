@@ -56,18 +56,23 @@ function getFestAjax(calObj) {
   console.log('ajax ', monthIndex, year);
   var monthUrl = "https://flynn.boolean.careers/exercises/api/holidays?year=" + year + "&month=" + monthIndex;
   $.ajax({
-    url: monthUrl,
+    url: "https://flynn.boolean.careers/exercises/api/holidays",
     method: "GET",
+    data: {
+      year: calObj.year,
+      month: calObj.monthIndex
+    },
     success: function (data) {
       // console.log(data);
       var arrObjMonth = data.response;
       // arrObjMonth = null; //test missing data
       if (data.success === true) {
         if (arrObjMonth) {
-          console.log('success', arrObjMonth);
+          // console.log('success', arrObjMonth);
           checkFestivity(arrObjMonth);
           //aggiorno oggetto
           calObj.festivity[monthIndex] = arrObjMonth;
+          console.log('cal obj update ajax: ', calObj);
         } else {
           checkFestivity('missing data');
         }
