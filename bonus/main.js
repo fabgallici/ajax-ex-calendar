@@ -1,7 +1,8 @@
 /* Creare un calendario dinamico con le festività.Partiamo dal gennaio 2018 dando la possibilità di cambiare mese, 
 gestendo il caso in cui l’API non possa ritornare festività.
 Il calendario partirà da gennaio 2018 e si concluderà a dicembre 2018(unici dati disponibili sull’API). */
-
+// BONUS: Creazione oggetto con salvataggio chiamate ajax precedenti, 
+// e utilizzo delle stesse per visualizzare festività quando già presenti
 
 
 //estrapolazione dati num giorni in un mese,nome giorni settimana, nome mesi etc, 
@@ -32,13 +33,12 @@ function evMonthData(calObj) {
     printCalendar(i, dayOfTheWeek, currentDate);
   }
   //inserire le festività presenti nel calendario
-  // getFestAjax(monthIndex, yearNum)
   getCalendarData(calObj);
   //creo celle vuote format lunedì primo elemento
   formatInitialEmptySpace(firstMondayOfMonth);
 }
 
-//controllo se ci sono dati caricati precedentemente in memoria sulla festività del mese,
+//controllo se ci sono dati caricati precedentemente in memoria calObj sulla festività del mese,
 //altrimenti interrogo l'api e li richiedo.
 function getCalendarData(calObj) {
   var monthIndex = calObj.monthIndex;
@@ -47,10 +47,11 @@ function getCalendarData(calObj) {
     getFestAjax(calObj);
   } else {
     checkFestivity(currMonthFest);
+    console.log('Used saved festivity data');
   }
 }
 
-//chiamata ajax get 
+//chiamata ajax get, salvataggio dati
 function getFestAjax(calObj) {
   var monthIndex = calObj.monthIndex;
   var year = calObj.year;
@@ -62,16 +63,15 @@ function getFestAjax(calObj) {
       month: monthIndex
     },
     success: function (data) {
-      // console.log(data);
       var arrObjMonth = data.response;
       // arrObjMonth = null; //test missing data
       if (data.success === true) {
         if (arrObjMonth) {
           // console.log('success', arrObjMonth);
           checkFestivity(arrObjMonth);
-          //aggiorno oggetto
+          //aggiorno oggetto calendar
           calObj.festivity[monthIndex] = arrObjMonth;
-          console.log('cal obj update ajax: ', calObj);
+          console.log('Ajax Call!, update callObj: ', calObj); // debug
         } else {
           checkFestivity('missing data');
         }
@@ -122,7 +122,7 @@ function formatInitialEmptySpace(day) {
   }
 }
 
-// ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore monthIndex e chiama getFestAjax con nuovo index mese
+// ritorna funzione in base alla sezione "prev" o "next", aggiorna contatore index
 function switchMonthBtns(direction) {
   if (direction === "prev") {
     return function (index) {
@@ -142,7 +142,7 @@ function switchMonthBtns(direction) {
     }
   }
 }
-
+//costruttore obj calendar
 var Calendar = function (monthIndex, year) {
   this.monthIndex = monthIndex;
   this.year = year;
@@ -152,13 +152,13 @@ Calendar.prototype.fillEmptyFest = function() {
   this.festivity = Array(12).fill(0);
 }
 
+//Init Program
 $(document).ready(function () {
-  var monthIndex = 0;
   const year = 2018;
-
+  var monthIndex = 0;
+  //creo nuovo oggetto Calendar in cui salvero dati festività, usero indice mese e anno
   var calObj = new Calendar(monthIndex, year);
   calObj.fillEmptyFest();
-  console.log(calObj);
   //inizializzo all'index primo mese 
   evMonthData(calObj);
 
@@ -167,14 +167,12 @@ $(document).ready(function () {
 
   $('.prev-btn').on('click', function () {
     monthIndex = prevMonth(monthIndex);
-    console.log(monthIndex);
     calObj.monthIndex = monthIndex;
     evMonthData(calObj);
   });
 
   $('.next-btn').on('click', function () {
     monthIndex = nextMonth(monthIndex);
-    console.log(monthIndex);
     calObj.monthIndex = monthIndex;
     evMonthData(calObj);
   });
