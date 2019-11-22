@@ -67,7 +67,7 @@ function getFestAjax(calObj) {
           console.log('success', arrObjMonth);
           checkFestivity(arrObjMonth);
           //aggiorno oggetto
-          calObj.festivity[monthIndex].push(arrObjMonth);
+          calObj.festivity[monthIndex] = arrObjMonth;
         } else {
           checkFestivity('missing data');
         }
