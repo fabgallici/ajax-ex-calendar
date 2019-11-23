@@ -60,8 +60,8 @@ function getFestAjax(calObj) {
     url: "https://flynn.boolean.careers/exercises/api/holidays",
     method: "GET",
     data: {
-      year: year,
-      month: monthIndex
+      year: year,  
+      month: monthIndex  //comment debug error:
     },
     success: function (data) {
       var arrObjMonth = data.response;   
@@ -77,7 +77,7 @@ function getFestAjax(calObj) {
           console.log('missing data');
         }
       } else {
-        console.log('error: ', data.error);
+        console.log('error not success: ', data.error);
       }
     },
     error: function (error) {
