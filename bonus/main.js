@@ -150,17 +150,18 @@ var Calendar = function (monthIndex, year) {
   this.year = year;
 }
 
-Calendar.prototype.fillEmptyFest = function() {
-  this.festivity = Array(12).fill(0);
+Calendar.prototype.fillEmptyFest = function(emptyFest) {
+  this.festivity = Array(emptyFest).fill(0);
 }
 
 //Init Program
 $(document).ready(function () {
   const year = 2018;
+  const months = 12;
   var monthIndex = 0;
   //creo nuovo oggetto Calendar in cui salvero dati festività, usero indice mese e anno
   var calObj = new Calendar(monthIndex, year);
-  calObj.fillEmptyFest();
+  calObj.fillEmptyFest(months);
   //inizializzo all'index primo mese 
   evMonthData(calObj);
 
