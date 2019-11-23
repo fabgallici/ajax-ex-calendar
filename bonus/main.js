@@ -46,7 +46,7 @@ function getCalendarData(calObj) {
   if (currMonthFest === 0) {
     getFestAjax(calObj);
   } else {
-    checkFestivity(currMonthFest);
+    printFestivity(currMonthFest);
     console.log('Used saved festivity data');
   }
 }
@@ -69,7 +69,7 @@ function getFestAjax(calObj) {
       if (data.success === true) {
         if (arrObjMonth) {
           // console.log('success', arrObjMonth);
-          checkFestivity(arrObjMonth);
+          printFestivity(arrObjMonth);
           //aggiorno oggetto calendar
           calObj.festivity[monthIndex] = arrObjMonth;
           console.log('Ajax Call!, update callObj: ', calObj); // debug
@@ -87,7 +87,7 @@ function getFestAjax(calObj) {
 }
 
 //controlla festività presenti e le associa all'attributo html corrispondente
-function checkFestivity(arrObjMonth) {
+function printFestivity(arrObjMonth) {
   if (Array.isArray(arrObjMonth)) {
     arrObjMonth.forEach(el => {
       var festName = el.name;
